@@ -1,0 +1,58 @@
+{% block css %}
+<link href="{{ url_for('static', filename='css/header.css') }}" rel="stylesheet" type="text/css"> {% endblock css %}
+
+<nav>
+    <a href="{{url_for('index')}}" class="nav-email">
+        <i class="fas fa-envelope"></i>
+        <b>Cars</b>
+    </a>
+    {% set activeURL = request.path %} {% if usuarioActual %}
+    <ul>
+        <li><a href="{{url_for('logout')}}">Cerrar Sesión</a></li>
+        <li>
+            <button type="button" id="nav-mode_switch">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+            </button>
+        </li>
+    </ul>
+    {% else %}
+    <ul>
+        <li class="{% if activeURL == '/' %}active{% endif %}"><a href="{{url_for('index')}}">Home {{active}}</a></li>
+        <li class="{% if activeURL == '/login' %}active{% endif %}"><a href="{{url_for('login')}}">Iniciar Sesión</a></li>
+        <li class="{% if activeURL == '/register' %}active{% endif %}"><a href="{{url_for('register')}}">Registrate</a></li>
+        <li>
+            <button type="button" id="nav-mode_switch">
+                <i class="fas fa-sun"></i>
+                <i class="fas fa-moon"></i>
+            </button>
+        </li>
+    </ul>
+    {% endif %}
+</nav>
+
+{% if usuario == 'logeado' %}
+<ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+        <a class="nav-link" href="conocenos1.php">Usuarios</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="conocenos1.php">Usuarios</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="conocenos1.php">Vehiculos</a>
+    </li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+    <li class="nav-item dropdown  nav-item active float-xs-right">
+        <a class="nav-link" href="#" id="responsiveNavbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-windows" aria-hidden="true"></i>
+                    Hola usuario</a>
+    </li>
+    <li class="nav-item dropdown  nav-item active float-xs-right">
+        <form method="POST" action="Usuario">
+            <input type="hidden" name="textOption" value="5">
+            <button type="submit" class="btnCerrarSesion">Cerrar Sesion</button>
+        </form>
+    </li>
+</ul>
+{% endif %} {% block script %} {% endblock script %}
