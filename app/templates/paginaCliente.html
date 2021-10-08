@@ -18,7 +18,7 @@
                 <li class="nav-item">
                     <h2>Rol</h2>
                     <select id="rolUsuario" class="form-select form-select-sm" aria-label=".form-select-sm example" onchange="page(this.value)">
-                        <option value="" selected>{{ activeRol }}</option>
+                        <option value="" selected style="color: green;">{{ activeRol }}</option>
                     {% for rol in rolesUsuario %}
                         <option value="{{rol}}">{{rol}}</option>
                     {% endfor %}
