@@ -8,6 +8,15 @@
     </a>
     {% set activeURL = request.path %} {% if usuarioActual %}
     <ul>
+        <li class="{% if activeURL == '/cliente/'+activeRol %}active{% endif %}"><a href="/cliente/{{ activeRol }}">Inicio</a></li>
+        {% if activeRol == 'Vendedor' %}
+        <li class="{% if activeURL == '/cliente/'+activeRol+'/VehiculosReg' %}active{% endif %}"><a href="/cliente/{{ activeRol }}/VehiculosReg">Vehiculos</a></li>
+        {% elif activeRol == 'Cliente' %}
+        <li class="{% if activeURL == '/cliente/'+activeRol+'/catalogo' %}active{% endif %}"><a href="/cliente/{{ activeRol }}/catalogo">Catalogo</a></li>
+        {% else %} {% endif %}
+        <li class="{% if activeURL == '/cliente/'+activeRol+'/editarPerfil/'+usuarioId %}active{% endif %}">
+            <a href="/cliente/{{ activeRol }}/editarPerfil/{{usuarioActual.usuId}}">Perfil</a>
+        </li>
         <li><a href="{{url_for('logout')}}">Cerrar Sesión</a></li>
         <li>
             <button type="button" id="nav-mode_switch">

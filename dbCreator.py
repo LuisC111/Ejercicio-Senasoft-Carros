@@ -7,9 +7,9 @@ app.app_context().push()
 
 db.create_all()
 
-categoria1 = Categoria('carro pequeno')
-categoria2 = Categoria('carro mediano')
-categoria3 = Categoria('carro grande')
+categoria1 = Categoria('camperos')
+categoria2 = Categoria('automóviles')
+categoria3 = Categoria('camionetas')
 
 rol1 = Rol('Administrador')
 rol2 = Rol('Vendedor')
@@ -25,8 +25,8 @@ usuarioRol3 = Usuario_Rol(2,2)
 usuarioRol4 = Usuario_Rol(3,2)
 usuarioRol5 = Usuario_Rol(3,3)
 
-vehiculo1 = Vehiculo(1,2,'2015','Mazda','Buen estado',15000)
-vehiculo2 = Vehiculo(2,3,'2019','Mazda','Nuevo',25000)
+vehiculo1 = Vehiculo(1235,1,2,'2015','Mazda','Usado',15000)
+vehiculo2 = Vehiculo(1123,3,3,'2019','Mazda','Nuevo',25000)
 
 datospersonales1 = DatosPersonales(1, 'Carmila', 'nieto', 'cc', '230123', '1231231', 'camilitarpt@solomillos.com')
 datospersonales2 = DatosPersonales(2, 'karmelo', 'vergara', 'cc', '23213', '123213123', 'karamelo@solorojos.com')
