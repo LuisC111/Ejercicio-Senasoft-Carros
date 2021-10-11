@@ -27,7 +27,7 @@
             </ul>
         </div>
     </nav>
-    {% if activeRol == 'Vendedor' %}
+    {% if activeRol == 'Vendedor' %} {% set activeURL = request.path %} {% if activeURL == '/cliente/'+activeRol %}
     <div class="card col-sm ">
         <h5 class="card-header ">Bienvenido {{usuarioActual.usuLogin}}</h5>
         <div class="card-body ">
@@ -36,7 +36,203 @@
             <a href="# " class="btn btn-primary ">Go somewhere</a>
         </div>
     </div>
-    {% elif activeRol == 'Administrador' %}
+    {% elif activeURL == '/cliente/'+activeRol+'/VehiculosReg' %}
+    <div class="card col-sm ">
+        <h5 class="card-header ">Bienvenido a vehiculos {{usuarioActual.usuLogin}}</h5>
+        <div class="card-body ">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active"><i class="fa fa-list"> </i> LISTADO DE VEHICULOS REGISTRADOS </li>
+            </ol>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <div class="col-lg-12">
+                        <button id="btnGenerar" type="button" class="nav-link active" data-target="#calificaciones" data-toggle="modal"><a href="{{ url_for('.download_report_vendedor') }}">
+                                <i class="far fa-file-pdf btn btn-outline-info btn-sm"></i></a>&nbsp;Generar
+                            Reporte</button>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="col-lg-12">
+                        <button id="btnNuevo" type="button" class="nav-link active" data-toggle="modal" data-target="#modalCreate"><i
+                                class="fa fa-user btn btn-outline-info btn-sm"></i>&nbsp;Nuevo Vehiculo</button>
+                    </div>
+                </li>
+            </ul>
+            <table id="vehiculosTable" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Placa</th>
+                        <th>Modelo</th>
+                        <th>Marca</th>
+                        <th>Estado</th>
+                        <th>Propietario</th>
+                        <th>Precio</th>
+                        <th>Categoria</th>
+                        <th>Accion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for veh, cat, dat in listaVehiculos %}
+                    <tr>
+                        <td>{{ veh.vehPlaca }}</td>
+                        <td>{{ veh.vehModelo }}</td>
+                        <td>{{ veh.vehMarca }}</td>
+                        <td>{{ veh.vehEstado }}</td>
+                        <td>{% if dat.datId == Null %} {{ 'Sin propietario' }} {% else %} {{ dat.datNombre }} {{ dat.datApellido }} {% endif %}</td>
+                        <td>{{ veh.vehPrecio }}</td>
+                        <td>{{ cat.catTipo }}</td>
+                        <td>
+                            <a class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{veh.vehPlaca}}">Editar</a>
+                        </td>
+                    </tr>
+                    <!--Modal para Editar-->
+                    <div class="modal fade bd-example-modal-lg" id="modaledit{{veh.vehPlaca}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header" style="background-color: #00CED1;">
+                                    <h5 class="modal-title" id="exampleModalLabel" style="color: rgb(255, 255, 255);">Editar Vehiculo</br>Placa: {{veh.vehPlaca}}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/cliente/{{activeRol}}/VehiculosReg/{{veh.vehPlaca}}" method="POST" id="formVehiculo" name="formVehiculo">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <input type="hidden" id="vehPlaca" name="vehPlaca" value="{{ veh.vehPlaca }}" class="form-control" required>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="vehModelo">Modelo</label>
+                                                <input type="number" id="vehModelo" name="vehModelo" value="{{ veh.vehModelo }}" class="form-control" placeholder="Modelo vehiculo" required>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="vehMarca">Marca</label>
+                                                <input type="text" class="form-control" id="vehMarca" name="vehMarca" value="{{ veh.vehMarca }}" placeholder="Marca vehiculo" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="vehPrecio">Precio</label>
+                                                <input type="number" class="form-control" id="vehPrecio" name="vehPrecio" value="{{ veh.vehPrecio }}" required>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="vehEstado">Estado</label>
+                                                <select id="vehEstado" name="vehEstado" class="form-control">
+                                                    <option value="{{ veh.vehEstado }}" selected>{{ veh.vehEstado }}</option>
+                                                    <option value="Usado">Usado</option>
+                                                    <option value="Nuevo">Nuevo</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="inputState">Cliente</label>
+                                                <select id="datId" name="datId" class="form-control">
+                                                    <option value="{{ dat.datId }}" selected>{% if dat.datId == Null %} {{ 'Sin propietario' }} {% else %} {{ dat.datNombre }} {{ dat.datApellido }} {% endif %}</option>
+                                                    {% for datos in datosUsuarios %}
+                                                    <option value="{{ datos.datId }}">{{ datos.datNombre }} {{ datos.datApellido }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="inputState">Categoria</label>
+                                                <select id="catId" name="catId" class="form-control">
+                                                    <option value="{{ cat.catId }}" selected>{{ cat.catTipo }}</option>
+                                                {% for cat in listaCategorias %}
+                                                    <option value="{{ cat.catId }}">{{ cat.catTipo }}</option>
+                                                {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <input class="btn btn-primary" type="submit" name="btnCrud" value="Editar" text="Button">
+                                            <button type="button" class="btn btn-outline-info my-2 my-sm-0" data-dismiss="modal">Cancelar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!--Modal para CRUD-->
+        <div class="modal fade bd-example-modal-lg" id="modalCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: #00CED1;">
+                        <h5 class="modal-title" id="exampleModalLabel" style="color: rgb(255, 255, 255);">Nuevo Vehiculo</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        {% set vehIdOp = '0' %}
+                        <form action="/cliente/{{activeRol}}/VehiculosReg/{{vehIdOp}}" method="POST" id="formVehiculo" name="formVehiculo">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="vehPlaca">Placa</label>
+                                    <input type="number" id="vehPlaca" name="vehPlaca" class="form-control" placeholder="Placa vehiculo" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="vehModelo">Modelo</label>
+                                    <input type="number" id="vehModelo" name="vehModelo" class="form-control" placeholder="Modelo vehiculo" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="vehMarca">Marca</label>
+                                    <input type="text" class="form-control" id="vehMarca" name="vehMarca" placeholder="Marca vehiculo" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="vehPrecio">Precio</label>
+                                    <input type="number" class="form-control" id="vehPrecio" name="vehPrecio" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="vehEstado">Estado</label>
+                                    <select id="vehEstado" name="vehEstado" class="form-control">
+                                        <option value="" selected>Seleccione un estado</option>
+                                        <option value="Usado">Usado</option>
+                                        <option value="Nuevo">Nuevo</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="inputState">Cliente</label>
+                                    <select id="datId" name="datId" class="form-control">
+                                        <option value="" selected>Seleccione un cliente</option>
+                                        {% for datos in datosUsuarios %}
+                                        <option value="{{ datos.datId }}">{{ datos.datNombre }} {{ datos.datApellido }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="inputState">Categoria</label>
+                                    <select id="catId" name="catId" class="form-control">
+                                        <option value="" selected>Seleccione una Categoria</option>
+                                    {% for cat in listaCategorias %}
+                                        <option value="{{ cat.catId }}">{{ cat.catTipo }}</option>
+                                    {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <input class="btn btn-primary" type="submit" name="btnCrud" value="Crear" text="Button">
+                                <button type="button" class="btn btn-outline-info my-2 my-sm-0" data-dismiss="modal">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %} {% elif activeRol == 'Administrador' %}
     <div class="card col-sm ">
         <h5 class="card-header ">Bienvenido {{usuarioActual.usuLogin}}</h5>
         <div class="card-body ">
@@ -45,16 +241,97 @@
             <a href="# " class="btn btn-primary ">Go somewhere</a>
         </div>
     </div>
-    {% else %}
+    {% else %} {% set activeURL = request.path %} {% if activeURL == '/cliente/'+activeRol %}
     <div class="card col-sm ">
         <h5 class="card-header ">Bienvenido {{usuarioActual.usuLogin}}</h5>
         <div class="card-body ">
             <h5 class="card-title ">Aqui apareceran las noticias del dia!</h5>
             <p class="card-text ">Aun no hay nada.</p>
-            <a href="# " class="btn btn-primary ">Go somewhere</a>
+            <a href="/cliente/Cliente/Vehiculos" class="btn btn-primary ">Go somewhere</a>
         </div>
     </div>
-    {% endif %}
+    {% elif activeURL == '/cliente/'+activeRol+'/Vehiculos'%}
+    <div class="card col-sm ">
+        <h5 class="card-header ">Bienvenido a vehiculos {{usuarioActual.usuLogin}}</h5>
+        <div class="card-body ">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active"><i class="fa fa-list"> </i> LISTADO DE VEHICULOS COMPRADOS </li>
+            </ol>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <div class="col-lg-12">
+                        <button id="btnGenerar" type="button" class="nav-link active"><a href="{{ url_for('.download_report') }}">
+                                <i class="far fa-file-pdf btn btn-outline-info btn-sm"></i></a>&nbsp;Generar
+                            Reporte</button>
+                    </div>
+                </li>
+            </ul>
+            <table id="vehiculosTable" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Placa</th>
+                        <th>Modelo</th>
+                        <th>Marca</th>
+                        <th>Estado</th>
+                        <th>Precio</th>
+                        <th>Categoria</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for veh, cat in listaVehiculosU %}
+                    <tr>
+                        <td>{{ veh.vehPlaca }}</td>
+                        <td>{{ veh.vehModelo }}</td>
+                        <td>{{ veh.vehMarca }}</td>
+                        <td>{{ veh.vehEstado }}</td>
+                        <td>{{ veh.vehPrecio }}</td>
+                        <td>{{ cat.catTipo }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% elif activeURL == '/cliente/'+activeRol+'/catalogo'%}
+    <div class="card col-sm ">
+        <h5 class="card-header ">Bienvenido al catalogo de vehiculos {{usuarioActual.usuLogin}}</h5>
+        <div class="card-body ">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active"><i class="fa fa-list"> </i> LISTADO DE VEHICULOS DISPONIBLES PARA COMPRAR</li>
+            </ol>
+
+            <div class="card-deck">
+                {% for veh, cat, dat in listaVehiculos %}
+                <div class="card" style="width: 18rem;">
+                    <form method="POST">
+                        <img class="card-img-top" src="..." alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ veh.vehMarca }}</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Marca: {{ veh.vehMarca }}</li>
+                            <li class="list-group-item">Modelo {{ veh.vehModelo }}</li>
+                            <li class="list-group-item">Precio: {{ veh.vehPrecio }}</li>
+                            <li class="list-group-item">Categoria: {{ cat.catTipo }}</li>
+                        </ul>
+                        <div class="card-body">
+                            <a href="/cliente/Cliente/Vehiculos" class="btn btn-primary">Comprar</a>
+                            <a href="/cliente/Cliente/catalogo/" class="btn btn-outline-info" role="button">Detalles</a>
+                        </div>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %} {% endif %}
+</div>
+<div class="row justify-content-between">
+    <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+    </div>
+    <div class="card col-sm ">
+    </div>
 </div>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <script>
@@ -68,4 +345,4 @@
         }
     }
 </script>
-{% endblock main %} {% block footer %} {% include 'footerModule.html' %} {% endblock footer %}br
+{% endblock main %} {% block footer %} {% include 'footerModule.html' %} {% endblock footer %}

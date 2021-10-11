@@ -4,7 +4,7 @@
 
 <div class="container2">
     <h1 style="background-color: #32c3e7; text-align: center; padding-bottom: 10px;">
-        Panel de Cliente</h1>
+        Panel de {{usuarioActual.usuLogin}}</h1>
 </div>
 <div class="row justify-content-between">
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
@@ -28,53 +28,52 @@
         </div>
     </nav>
     {% if activeRol == 'Vendedor' %}
-    <div class="card col-sm ">
-        <form>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="inputEmail4">Email</label>
-                    <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+    <div class="card col-sm">
+        <h5 class="card-header ">Datos de tu perfil {{usuarioActual.usuLogin}}</h5>
+        <div class="card-body ">
+            {% for datos in datosPersonales %}
+            <form method="POST">
+                <div class="form-group">
+                    <input type="hidden" class="form-control" id="datId" name="datId" value="{{ datos.datId }}">
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="inputPassword4">Password</label>
-                    <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail4">Correo</label>
+                        <input type="email" value="{{ datos.datCorreo }}" id="datCorreo" name="datCorreo" class="form-control" placeholder="Email" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputPassword4">Telefono</label>
+                        <input type="tel" class="form-control" value="{{ datos.datTelefono }}" id="datTelefono" name="datTelefono" placeholder="Telefono" required>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="inputAddress">Address</label>
-                <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-            </div>
-            <div class="form-group">
-                <label for="inputAddress2">Address 2</label>
-                <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="inputCity">City</label>
-                    <input type="text" class="form-control" id="inputCity">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail4">Nombre</label>
+                        <input type="text" value="{{ datos.datNombre }}" id="datNombre" name="datNombre" class="form-control" placeholder="Nombre" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputPassword4">Apellido</label>
+                        <input type="text" class="form-control" value="{{ datos.datApellido }}" id="datApellido" name="datApellido" placeholder="Apellido" required>
+                    </div>
                 </div>
-                <div class="form-group col-md-4">
-                    <label for="inputState">State</label>
-                    <select id="inputState" class="form-control">
-              <option selected>Choose...</option>
-              <option>...</option>
-            </select>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputState">Tipo Documento</label>
+                        <select id="datTipoId" name="datTipoId" class="form-control" disabled>
+                            <option value="{{ datos.datTipoId }}" selected>{{ datos.datTipoId }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputCity">Numero Identificacion</label>
+                        <input type="number" class="form-control" value="{{ datos.datNumeroId }}" id="datNumeroId" name="datNumeroId" disabled>
+                    </div>
                 </div>
-                <div class="form-group col-md-2">
-                    <label for="inputZip">Zip</label>
-                    <input type="text" class="form-control" id="inputZip">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Editar</button>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="gridCheck">
-                    <label class="form-check-label" for="gridCheck">
-              Check me out
-            </label>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Sign in</button>
-        </form>
+            </form>
+            {% endfor %}
+        </div>
     </div>
     {% elif activeRol == 'Administrador' %}
     <div class="card col-sm ">
@@ -126,53 +125,52 @@
         </form>
     </div>
     {% else %}
-    <div class="card col-sm ">
-        <form>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="inputEmail4">Email</label>
-                    <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+    <div class="card col-sm">
+        <h5 class="card-header ">Datos de tu perfil {{usuarioActual.usuLogin}}</h5>
+        <div class="card-body ">
+            {% for datos in datosPersonales %}
+            <form method="POST">
+                <div class="form-group">
+                    <input type="hidden" class="form-control" id="datId" name="datId" value="{{ datos.datId }}">
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="inputPassword4">Password</label>
-                    <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail4">Correo</label>
+                        <input type="email" value="{{ datos.datCorreo }}" id="datCorreo" name="datCorreo" class="form-control" placeholder="Email" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputPassword4">Telefono</label>
+                        <input type="tel" class="form-control" value="{{ datos.datTelefono }}" id="datTelefono" name="datTelefono" placeholder="Telefono" required>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="inputAddress">Address</label>
-                <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-            </div>
-            <div class="form-group">
-                <label for="inputAddress2">Address 2</label>
-                <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="inputCity">City</label>
-                    <input type="text" class="form-control" id="inputCity">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail4">Nombre</label>
+                        <input type="text" value="{{ datos.datNombre }}" id="datNombre" name="datNombre" class="form-control" placeholder="Nombre" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputPassword4">Apellido</label>
+                        <input type="text" class="form-control" value="{{ datos.datApellido }}" id="datApellido" name="datApellido" placeholder="Apellido" required>
+                    </div>
                 </div>
-                <div class="form-group col-md-4">
-                    <label for="inputState">State</label>
-                    <select id="inputState" class="form-control">
-              <option selected>Choose...</option>
-              <option>...</option>
-            </select>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputState">Tipo Documento</label>
+                        <select id="datTipoId" name="datTipoId" class="form-control" disabled>
+                            <option value="{{ datos.datTipoId }}" selected>{{ datos.datTipoId }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputCity">Numero Identificacion</label>
+                        <input type="number" class="form-control" value="{{ datos.datNumeroId }}" id="datNumeroId" name="datNumeroId" disabled>
+                    </div>
                 </div>
-                <div class="form-group col-md-2">
-                    <label for="inputZip">Zip</label>
-                    <input type="text" class="form-control" id="inputZip">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Editar</button>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="gridCheck">
-                    <label class="form-check-label" for="gridCheck">
-              Check me out
-            </label>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Sign in</button>
-        </form>
+            </form>
+            {% endfor %}
+        </div>
     </div>
     {% endif %}
 </div>

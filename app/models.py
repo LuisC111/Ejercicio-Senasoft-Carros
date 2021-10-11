@@ -85,8 +85,12 @@ class Vehiculo(db.Model):
     vehPrecio = db.Column(db.Integer)
     datId = db.Column(db.Integer, db.ForeignKey('DatosPersonales.datId'))
     catId = db.Column(db.Integer, db.ForeignKey('Categoria.catId'))
+
+    def get_id(self):
+        return (self.vehPlaca)
  
-    def __init__(self, datId, catId, vehModelo, vehMarca, vehEstado, vehPrecio):
+    def __init__(self, vehPlaca, datId, catId, vehModelo, vehMarca, vehEstado, vehPrecio):
+        self.vehPlaca = vehPlaca
         self.datId = datId
         self.catId = catId
         self.vehModelo = vehModelo
